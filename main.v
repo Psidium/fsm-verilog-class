@@ -1,19 +1,25 @@
+//`define DEBUG
 `include "contador.v"
 `include "fsmGB.v"
 module main;
-reg [3:0] a,b;
+reg signed [3:0] a,b;
 wire [7:0] ab_result;
-reg clock, reset;
-wire initCount, bigger_than_max, start;
+reg clock, reset, start;
+wire initCount, bigger_than_max;
 wire [2:0] val;
 initial begin
     clock<= 0;
     reset <=0;
+    start<=0;
     a<=0;
     b<=0;
-    $display("clock   a       b     result");
-    $monitor(" %d   %d %b    %d %b    %b %d", $time, a,a,b,b, ab_result,ab_result);
-
+    $display("time\t clock   a       b         result");
+    $monitor("%g\t %d  %d %b    %d %b    %b %d", $time, clock, a,a,b,b, ab_result,ab_result);
+    #5 a <= 4;
+    b <= 3;
+    start <=1;
+    #5 start <=0;
+    #20 $finish;
 end
 
 always @(*)

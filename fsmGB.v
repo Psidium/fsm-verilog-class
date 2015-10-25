@@ -1,16 +1,17 @@
 module fsm(clock,reset,start, a, b, contBETval, initCount, countVal, ab_result);
 input reset, clock, start;
-input [3:0] a,b;
+input signed [3:0] a,b;
 input contBETval; //count bigger or equal than val
 output reg initCount; //init counter
 output reg [2:0] countVal;
 output reg [1:0] currentState; //mudaDisplay = currentState
-output reg [7:0] ab_result;
+output reg signed [7:0] ab_result;
 reg [1:0] nextState;
 reg [7:0] ab;
+
 initial begin
-    currentState = 0;
-    nextState =0;
+    currentState <= 0;
+    nextState <=0;
 end
 
 always @(posedge clock) begin
@@ -38,7 +39,7 @@ always @(*) begin
             `endif
         end
         2'b01: begin //show A and B @ display
-            countVal <= 6;
+            countVal <= 5;
             initCount <= 1;
             ab_result <= ab;
             if (contBETval) begin
@@ -53,7 +54,7 @@ always @(*) begin
             `endif
         end
         2'b10: begin
-            countVal <= 3;
+            countVal <= 2;
             initCount <= 1;
             ab_result <= a - b;
             if (contBETval)
@@ -65,7 +66,7 @@ always @(*) begin
             `endif
         end
         2'b11: begin
-            countVal <= 3;
+            countVal <= 2;
             initCount <= 1;
             //bin to gray
             ab_result <= ab[7:0] ^ {1'b0, ab[7:1]}; //AB XOR AB with MSB preserved

@@ -3,7 +3,7 @@
 `include "fsmGB.v"
 module main;
 reg signed [3:0] a,b;
-wire [7:0] ab_result;
+wire signed [7:0] ab_result;
 reg clock, reset, start;
 wire initCount, bigger_than_max;
 wire [2:0] val;
@@ -19,7 +19,12 @@ initial begin
     b <= 3;
     start <=1;
     #5 start <=0;
-    #20 $finish;
+    #30;
+    a <= -3;
+    b <= 5;
+    start <= 1;
+    #5 start <= 0;
+    #30 $finish;
 end
 
 always @(*)

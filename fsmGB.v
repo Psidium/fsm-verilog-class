@@ -8,12 +8,19 @@ output reg [1:0] currentState; //mudaDisplay = currentState
 output reg [7:0] ab_result;
 reg [1:0] nextState;
 reg [7:0] ab;
+initial begin
+    currentState = 0;
+    nextState =0;
+end
 
 always @(posedge clock) begin
     if (reset == 1)
         currentState <= 2'b00;
     else
         currentState <= nextState;
+    `ifdef DEBUG
+        $display("fsmGB.v:18:clock ticked. currentState: %b nextState %b", currentState, nextState);
+    `endif
 end
 
 always @(*) begin
@@ -26,6 +33,9 @@ always @(*) begin
             else 
                 nextState <= 2'b01;
             ab_result <= 8'hFF;
+            `ifdef DEBUG
+                $display("fsmGB.v:33: start: %b ab_result %h currentState: %b nextState %b", start, ab_result, currentState, nextState);
+            `endif
         end
         2'b01: begin //show A and B @ display
             countVal <= 6;
@@ -38,6 +48,9 @@ always @(*) begin
                     nextState <= 2'b11;
             end else
                 nextState <= 2'b01;
+            `ifdef DEBUG
+                $display("fsmGB.v:47: ab_result: %b currentState: %b nextState %b", ab_result, currentState, nextState);
+            `endif
         end
         2'b10: begin
             countVal <= 3;
@@ -47,6 +60,9 @@ always @(*) begin
                 nextState <= 2'b00;
             else
                 nextState <= 2'b10;
+            `ifdef DEBUG
+                $display("fsmGB.v:60: ab_result: %b currentState: %b nextState %b", ab_result, currentState, nextState);
+            `endif
         end
         2'b11: begin
             countVal <= 3;
@@ -57,6 +73,9 @@ always @(*) begin
                 nextState <= 2'b00;
             else
                 nextState <= 2'b11;
+            `ifdef DEBUG
+                $display("fsmGB.v:73: ab_result: %b currentState: %b nextState %b", ab_result, currentState, nextState);
+            `endif
         end
     endcase
 end
